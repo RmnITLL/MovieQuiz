@@ -2,6 +2,13 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController {
 
+    /*
+     За создание и хранение моделей QuizQuestion.
+     Создание QuizStepViewModel.
+     Обновление состояния текстов и картинок с помощью ViewModel.
+     Решение отобразить алерт о результатах игры или следующий вопрос.
+     */
+
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
     @IBOutlet private weak var counterLabel: UILabel!
@@ -53,6 +60,7 @@ final class MovieQuizViewController: UIViewController {
         let correctAnswer: Bool
     }
 
+    // В модели QuizQuestion хранится информация о каждом вопросе
     struct QuizStepViewModel {
         let image: UIImage
         let question: String
