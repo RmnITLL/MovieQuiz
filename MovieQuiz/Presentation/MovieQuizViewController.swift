@@ -1,6 +1,6 @@
 import UIKit
 
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     /*
      За создание и хранение моделей QuizQuestion.
@@ -50,7 +50,7 @@ final class MovieQuizViewController: UIViewController {
     // общее количество вопросов для квиза
     private let questionsAmount: Int = 10
     // фабрика вопросов. Контроллер будет обращаться за вопросами к ней.
-    private var questionFactory: QuestionFactory = QuestionFactory()
+    private var questionFactory: QuestionFactoryProtocol?
     // вопрос, который видит пользователь.
     private var currentQuestion: QuizQuestion?
 
@@ -61,14 +61,42 @@ final class MovieQuizViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let firstQuestion = questionFactory.requestNextQuestion() {
-            currentQuestion = firstQuestion
-            let viewModel = convert(model: firstQuestion)
+        let questionFactory = QuestionFactory()
+        questionFactory.setup(delegate: self)
+        self.questionFactory = questionFactory
 
-            show(quiz: viewModel)
+        questionFactory.requestNextQuestion()
+       // print(Bundle.main.bundlePath)
+        print(NSHomeDirectory())
+    }
+
+//        if let firstQuestion = questionFactory.requestNextQuestion() {
+//            currentQuestion = firstQuestion
+//            let viewModel = convert(model: firstQuestion)
+//
+//            show(quiz: viewModel)
+      //  }
+    //}
+
+    // MARK: - QuestionFactoryDelegate
+
+    func didReceiveNextQuestion(question: QuizQuestion?) {
+
+        // проверка, что вопрос не nil
+        guard let question = question else {
+            return
+        }
+
+        currentQuestion = question
+        let viewModel = convert(model: question)
+
+        DispatchQueue.main.async { [weak self] in
+            self?.show(quiz: viewModel)
         }
 
     }
+
+
 
     // MARK: - Private Methods
 
@@ -98,17 +126,21 @@ final class MovieQuizViewController: UIViewController {
             self.currentQuestionIndex = 0
             self.correctAnswers = 0
 
-            if let firstQuestion = self.questionFactory.requestNextQuestion() {
-                self.currentQuestion = firstQuestion
-                let viewModel = self.convert(model: firstQuestion)
+            self.questionFactory?.requestNextQuestion()
 
-                self.show(quiz: viewModel)
-            }
+//            if let firstQuestion = self.questionFactory.requestNextQuestion() {
+//                self.currentQuestion = firstQuestion
+//                let viewModel = self.convert(model: firstQuestion)
+//
+//                self.show(quiz: viewModel)
+
+         //   }
         }
 
         alert.addAction(action)
         self.present(alert, animated: true, completion: nil)
     }
+
 
     private func showAnswerResult(isCorrect: Bool) {
         if isCorrect {
@@ -139,14 +171,15 @@ final class MovieQuizViewController: UIViewController {
             show(quiz: viewModel)
         } else {
             currentQuestionIndex += 1
+            self.questionFactory?.requestNextQuestion()
 
-            if let nextQuestion = questionFactory.requestNextQuestion() {
-                currentQuestion = nextQuestion
-                let viewModel = convert(model: nextQuestion)
-
-                imageView.layer.borderWidth = 0
-                show(quiz: viewModel)
-            }
+//            if let nextQuestion = questionFactory.requestNextQuestion() {
+//                currentQuestion = nextQuestion
+//                let viewModel = convert(model: nextQuestion)
+//
+//                imageView.layer.borderWidth = 0
+//                show(quiz: viewModel)
+//            }
         }
     }
 
