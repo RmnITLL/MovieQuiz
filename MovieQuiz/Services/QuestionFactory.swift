@@ -7,11 +7,14 @@
 
 import UIKit
 
-class QuestionFactory: QuestionFactoryProtocol {
+final class QuestionFactory: QuestionFactoryProtocol {
   //  храниться массив с вопросами и один метод, который вернёт случайно выбранный вопрос.
 
-    weak var delegate: QuestionFactoryDelegate?
+    private weak var delegate: QuestionFactoryDelegate?
 
+    init(delegate: QuestionFactoryDelegate) {
+        self.delegate = delegate
+    }
 
     // MARK: - Privat Properties
 
@@ -30,10 +33,11 @@ class QuestionFactory: QuestionFactoryProtocol {
 
     // MARK: - Methods
 
-    func setup(delegate: QuestionFactoryDelegate) {
-        self.delegate = delegate
-    }
+//    func setup(delegate: QuestionFactoryDelegate) {
+//        self.delegate = delegate
+//    }
 
+    // случайный вопрос
     func requestNextQuestion() {
 
         guard let index = (0..<questions.count).randomElement() else {
