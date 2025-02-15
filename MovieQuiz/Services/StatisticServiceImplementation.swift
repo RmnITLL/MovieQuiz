@@ -17,7 +17,7 @@ final class StatisticServiceImplementation: StatisticServiceProtocol {
         case bestGameDate
     }
 
-    private let storage:UserDefaults = .standard
+    private let storage = UserDefaults.standard
 
     private var correct: Int {
         get {
@@ -42,7 +42,6 @@ final class StatisticServiceImplementation: StatisticServiceProtocol {
     }
 
     func store(correct count: Int, total amount: Int) {
-
         let newGame = GameResult(correct: count, total: amount, date: Date())
         if newGame.isBetterThan(bestGame) {
             bestGame = newGame

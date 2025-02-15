@@ -16,7 +16,7 @@ final class QuestionFactory: QuestionFactoryProtocol {
         self.delegate = delegate
     }
 
-    // MARK: - Privat Properties
+    // MARK: - Private Properties
 
     private let questions: [QuizQuestion] = [
         QuizQuestion(imageName: "The Godfather", text: "Рейтинг этого фильма больше чем 6?", correctAnswer: true),
