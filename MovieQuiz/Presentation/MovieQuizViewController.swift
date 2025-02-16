@@ -65,13 +65,13 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - IB Actions
 
     @IBAction private func yesButtonClicked(_ sender: Any) {
+
         changeStateButtons(isEnabled: false)
         guard let currentQuestion else { return }
 
         let givenAnswer = true
 
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-
     }
 
     @IBAction private func noButtonClicked(_ sender: Any) {
@@ -82,8 +82,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let givenAnswer = false
 
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
-
-
     }
 
     // MARK: - Private Methods
@@ -120,7 +118,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         return [score, gamesCount, record, totalAccuracy].joined(separator: "\n")
     }
 
-    // Показать результат
+    // показать результат
     private func show(_ result: QuizResultsViewModel) {
 
         let statisticText = getGamesStatistic(
@@ -148,9 +146,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             correctAnswers += 1
         }
 
-       // imageView.layer.masksToBounds = true
-       // imageView.layer.borderWidth = 8
-       // imageView.layer.cornerRadius = 20
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
