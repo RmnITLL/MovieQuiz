@@ -5,12 +5,12 @@
 //  Created by R Kolos on 28.01.2025.
 //
 
-import UIKit
+import Foundation
 
 struct QuizResultsViewModel {
     let title: String
     let text: String
     let buttonText: String
-    }
+}
 
 

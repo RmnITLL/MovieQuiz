@@ -2,7 +2,7 @@ import UIKit
 
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
-        // MARK: - Outlet
+    // MARK: - Outlet
 
     @IBOutlet private weak var imageView: UIImageView!
     @IBOutlet private weak var textLabel: UILabel!
@@ -10,33 +10,40 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private weak var noButton: UIButton!
     @IBOutlet private weak var yesButton: UIButton!
 
-        // MARK: - Private Properties
+    // MARK: - Private Properties
 
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
-        // общее количество вопросов для квиза
+    // общее количество вопросов для квиза
     private let questionsAmount: Int = 10
-        // фабрика вопросов. Контроллер будет обращаться за вопросами к ней.
+    // фабрика вопросов. Контроллер будет обращаться за вопросами к ней.
     private var questionFactory: QuestionFactoryProtocol?
-        // вопрос, который видит пользователь.
+    // вопрос, который видит пользователь.
     private var currentQuestion: QuizQuestion?
     private var alertPresenter: AlertPresenter?
     private var statisticService: StatisticServiceProtocol?
 
 
-        // MARK: - Lifecycle
+    // MARK: - Lifecycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         imageView.layer.masksToBounds = true
         imageView.layer.borderWidth = 8
-        questionFactory = QuestionFactory(delegate: self)
-        guard let questionFactory = questionFactory else { return }
-        questionFactory.requestNextQuestion()
+        imageView.layer.cornerRadius = 20
+
 
         alertPresenter = AlertPresenter(viewController: self)
         statisticService = StatisticServiceImplementation()
 
+        questionFactory = QuestionFactory(delegate: self)
+        //guard let questionFactory = questionFactory else { return }
+        if let questionFactory = questionFactory {
+            questionFactory.requestNextQuestion()
+        } else {
+            return
+        }
     }
 
     // MARK: - QuestionFactoryDelegate
@@ -58,22 +65,24 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     // MARK: - IB Actions
 
     @IBAction private func yesButtonClicked(_ sender: Any) {
+        changeStateButtons(isEnabled: false)
+        guard let currentQuestion else { return }
 
-        guard let currentQuestion else {
-            return
-        }
         let givenAnswer = true
+
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
 
     }
 
     @IBAction private func noButtonClicked(_ sender: Any) {
 
-        guard let currentQuestion else {
-            return
-        }
+        changeStateButtons(isEnabled: false)
+        guard let currentQuestion else { return }
+
         let givenAnswer = false
+
         showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
+
 
     }
 
@@ -124,7 +133,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             message: statisticText,
             buttonText: result.buttonText,
             completion: { [weak self] in
-                    //self?.restartQuiz()
                 self?.currentQuestionIndex = 0
                 self?.correctAnswers = 0
                 self?.questionFactory?.requestNextQuestion()
@@ -135,15 +143,21 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     //  меняем цвет рамки
     private func showAnswerResult(isCorrect: Bool) {
+
         if isCorrect {
             correctAnswers += 1
         }
 
+       // imageView.layer.masksToBounds = true
+       // imageView.layer.borderWidth = 8
+       // imageView.layer.cornerRadius = 20
         imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
+
             self.showNextQuestionOrResults()
+            self.changeStateButtons(isEnabled: true)
         }
     }
 
@@ -152,8 +166,9 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
         if currentQuestionIndex == questionsAmount - 1 {
             let text = correctAnswers == questionsAmount ?
-            "Поздравляем, вы ответили на 10 из 10" :
+            "Поздравляем, вы ответили на 10 из 10!" :
             "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
+
             statisticService?
                 .store(correct: correctAnswers, total: questionsAmount)
 
@@ -166,5 +181,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
             currentQuestionIndex += 1
             self.questionFactory?.requestNextQuestion()
         }
+    }
+
+    // блокировка кнопок
+    private func changeStateButtons(isEnabled: Bool) {
+
+        yesButton.isEnabled = isEnabled
+        yesButton.alpha = isEnabled ? 1.0 : 0.5
+
+        noButton.isEnabled = isEnabled
+        noButton.alpha = isEnabled ? 1.0 : 0.5
     }
 }

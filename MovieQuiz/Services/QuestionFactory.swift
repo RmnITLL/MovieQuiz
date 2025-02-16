@@ -5,7 +5,7 @@
 //  Created by R Kolos on 28.01.2025.
 //
 
-import UIKit
+import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
   //  храниться массив с вопросами и один метод, который вернёт случайно выбранный вопрос.
@@ -32,10 +32,6 @@ final class QuestionFactory: QuestionFactoryProtocol {
     ]
 
     // MARK: - Methods
-
-//    func setup(delegate: QuestionFactoryDelegate) {
-//        self.delegate = delegate
-//    }
 
     // случайный вопрос
     func requestNextQuestion() {

@@ -5,7 +5,7 @@
 //  Created by R Kolos on 31.01.2025.
 //
 
-import UIKit
+import Foundation
 
 protocol QuestionFactoryProtocol {
     func requestNextQuestion()
