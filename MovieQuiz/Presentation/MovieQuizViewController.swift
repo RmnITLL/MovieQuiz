@@ -38,7 +38,6 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         statisticService = StatisticServiceImplementation()
 
         questionFactory = QuestionFactory(delegate: self)
-        //guard let questionFactory = questionFactory else { return }
         if let questionFactory = questionFactory {
             questionFactory.requestNextQuestion()
         } else {
