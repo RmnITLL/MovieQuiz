@@ -9,7 +9,7 @@ import Foundation
 
 // В модели QuizQuestion хранится информация о каждом вопросе
 struct QuizQuestion {
-    let imageName: String
+    let imageName: Data
     let text: String
     let correctAnswer: Bool
 }
