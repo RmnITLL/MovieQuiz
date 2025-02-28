@@ -30,4 +30,9 @@ final class AlertPresenter {
         alert.addAction(action)
         viewController?.present(alert, animated: true, completion: nil)
     }
+
+    // при ошибке скрывается алерт
+    func closeAlert() {
+        viewController?.dismiss(animated: true, completion: nil)
+    }
 }
