@@ -64,7 +64,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         }
     }
 
-    // MARK: - Статус-бара
+    // MARK: - Status Bar
 
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return .lightContent
@@ -107,7 +107,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         imageView.image = step.image
         textLabel.text = step.question
         counterLabel.text = step.questionNumber
-       // self.imageView.layer.borderColor = UIColor.clear.cgColor
+        self.imageView.layer.borderColor = UIColor.clear.cgColor
     }
 
     // Статистика игры, выходит в алерте
