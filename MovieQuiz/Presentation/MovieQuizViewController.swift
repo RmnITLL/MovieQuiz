@@ -9,6 +9,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     @IBOutlet private weak var counterLabel: UILabel!
     @IBOutlet private weak var noButton: UIButton!
     @IBOutlet private weak var yesButton: UIButton!
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
 
     // MARK: - Private Properties
 
@@ -29,20 +30,21 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        imageView.layer.masksToBounds = true
-        imageView.layer.borderWidth = 8
-        imageView.layer.cornerRadius = 20
-
+        editedImage()
 
         alertPresenter = AlertPresenter(viewController: self)
         statisticService = StatisticServiceImplementation()
+        questionFactory = QuestionFactory(
+            delegate: self,
+            moviesLoader: MoviesLoader()
+        )
 
-        questionFactory = QuestionFactory(delegate: self)
-        if let questionFactory = questionFactory {
-            questionFactory.requestNextQuestion()
-        } else {
-            return
-        }
+        guard let questionFactory = questionFactory else { return }
+        questionFactory.loadData()
+
+        activityIndicator.hidesWhenStopped = true
+        showLoadingIndicator()
+
     }
 
     // MARK: - QuestionFactoryDelegate
@@ -57,8 +59,15 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
         let viewModel = convert(model: question)
 
         DispatchQueue.main.async { [weak self] in
-            self?.show(quiz: viewModel)
+            guard let self = self else { return }
+            self.show(quiz: viewModel)
         }
+    }
+
+    // MARK: - Status Bar
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
 
     // MARK: - IB Actions
@@ -87,11 +96,10 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
     // принимает моковый вопрос и возвращает вью модель для вопроса
     private func convert(model: QuizQuestion) -> QuizStepViewModel {
-        let questionStep = QuizStepViewModel(
-            image: UIImage(named: model.imageName) ?? UIImage(),
+        return QuizStepViewModel(
+            image: UIImage(data: model.imageName) ?? UIImage(),
             question: model.text,
             questionNumber: "\(currentQuestionIndex + 1)/\(questionsAmount)")
-        return questionStep
     }
 
     // метод вывода на экран вопроса, который принимает на вход вью модель вопроса
@@ -152,6 +160,7 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
             self.showNextQuestionOrResults()
             self.changeStateButtons(isEnabled: true)
+            self.imageView.layer.borderColor = UIColor.clear.cgColor
         }
     }
 
@@ -159,21 +168,33 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
     private func showNextQuestionOrResults() {
 
         if currentQuestionIndex == questionsAmount - 1 {
-            let text = correctAnswers == questionsAmount ?
-            "Поздравляем, вы ответили на 10 из 10!" :
-            "Вы ответили на \(correctAnswers) из 10, попробуйте ещё раз!"
 
-            statisticService?
+            guard let statisticService = statisticService else { return }
+            statisticService
                 .store(correct: correctAnswers, total: questionsAmount)
 
-            let viewModel = QuizResultsViewModel(
+            let message = getGamesStatistic(
+                correct: correctAnswers,
+                total: questionsAmount
+            )
+
+            let alertModel = AlertModel(
                 title: "Этот раунд окончен!",
-                text: text,
-                buttonText: "Сыграть ещё раз")
-            show(viewModel)
+                message: message,
+                buttonText: "Сыграть еще раз",
+                completion: { [weak self] in
+                    self?.currentQuestionIndex = 0
+                    self?.correctAnswers = 0
+                    guard let questionFactory = self?.questionFactory else {return}
+                    questionFactory.requestNextQuestion()
+            }
+            )
+            guard let alertPresenter else { return }
+            alertPresenter.showAlert(with: alertModel)
         } else {
             currentQuestionIndex += 1
-            self.questionFactory?.requestNextQuestion()
+            guard let questionFactory = questionFactory else { return }
+            questionFactory.requestNextQuestion()
         }
     }
 
@@ -185,5 +206,51 @@ final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
 
         noButton.isEnabled = isEnabled
         noButton.alpha = isEnabled ? 1.0 : 0.5
+    }
+
+    // картинка при загрузки
+    private func editedImage() {
+        imageView.backgroundColor = .clear
+        imageView.layer.masksToBounds = true
+        imageView.layer.borderWidth = 8
+        imageView.layer.cornerRadius = 20
+
+        textLabel.text = ""
+        counterLabel.text = ""
+    }
+
+    func didFailToLoadData(with error: Error) {
+        showNetworkError(message: error.localizedDescription)
+    }
+
+    func didLoadDataFromServer() {
+        hideLoadingIndicator()
+        alertPresenter?.closeAlert()
+        questionFactory?.requestNextQuestion()
+    }
+
+    // отображение индикатора
+    private func showLoadingIndicator() {
+        activityIndicator.startAnimating()
+    }
+
+    // скрытие индикатора
+    private func hideLoadingIndicator() {
+        activityIndicator.stopAnimating()
+    }
+
+    private func showNetworkError(message: String) {
+        hideLoadingIndicator()
+
+        let model = AlertModel(
+            title: "Что-то пошло не так(",
+            message: message,
+            buttonText: "Попробовать еще раз") { [weak self] in
+                guard let self = self else { return }
+
+                self.questionFactory?.loadData()
+            }
+
+        alertPresenter?.showAlert(with: model)
     }
 }
