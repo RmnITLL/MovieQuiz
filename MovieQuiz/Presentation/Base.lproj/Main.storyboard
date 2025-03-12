@@ -29,10 +29,10 @@
                                 <rect key="frame" x="20" y="54" width="374" height="808"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nUv-D6-84F">
-                                        <rect key="frame" x="0.0" y="0.0" width="374" height="72.333333333333329"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="374" height="72"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="56C-ry-vLh" userLabel="Question Title Label">
-                                                <rect key="frame" x="0.0" y="0.0" width="333.66666666666669" height="72.333333333333329"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="338" height="72"/>
                                                 <color key="backgroundColor" name="YP Black"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="Вопрос:">
@@ -46,8 +46,9 @@
                                                 <color key="highlightedColor" name="YP White"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KVq-70-hi2" userLabel="Index Label">
-                                                <rect key="frame" x="333.66666666666669" y="0.0" width="40.333333333333314" height="72.333333333333329"/>
+                                                <rect key="frame" x="338" y="0.0" width="36" height="72"/>
                                                 <color key="backgroundColor" name="YP Black"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="Index"/>
                                                 <attributedString key="attributedText">
                                                     <fragment content="1/10">
                                                         <attributes>
@@ -62,14 +63,20 @@
                                         </subviews>
                                     </stackView>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0N9-L7-SWP" userLabel="Preview Image">
-                                        <rect key="frame" x="0.0" y="92.333333333333371" width="374" height="562"/>
+                                        <rect key="frame" x="0.0" y="92" width="374" height="562"/>
                                         <color key="backgroundColor" name="YP White"/>
+                                        <accessibility key="accessibilityConfiguration" identifier="Poster"/>
                                         <constraints>
                                             <constraint firstAttribute="height" secondItem="0N9-L7-SWP" secondAttribute="width" multiplier="3:2" constant="1" id="eZY-ta-tAo" userLabel="aspect = 2:3"/>
                                         </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="20"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Рейтинг этого фильма меньше чем 5?" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b0T-LD-H3c" userLabel="Question Label">
-                                        <rect key="frame" x="0.0" y="674.33333333333337" width="374" height="53.666666666666629"/>
+                                        <rect key="frame" x="0.0" y="674" width="374" height="54"/>
                                         <fontDescription key="fontDescription" name="YSDisplay-Bold" family="YS Display" pointSize="23"/>
                                         <color key="textColor" name="YP White"/>
                                         <nil key="highlightedColor"/>
@@ -80,6 +87,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3tl-SK-2by" userLabel="No Button">
                                                 <rect key="frame" x="0.0" y="0.0" width="177" height="60"/>
                                                 <color key="backgroundColor" name="YP White"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="No"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="60" id="6dL-GH-cdQ"/>
                                                 </constraints>
@@ -100,6 +108,7 @@
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="syE-CX-eEU" userLabel="Yes Button">
                                                 <rect key="frame" x="197" y="0.0" width="177" height="60"/>
                                                 <color key="backgroundColor" name="YP White"/>
+                                                <accessibility key="accessibilityConfiguration" identifier="Yes"/>
                                                 <fontDescription key="fontDescription" name="YSDisplay-Medium" family="YS Display" pointSize="20"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="Да">

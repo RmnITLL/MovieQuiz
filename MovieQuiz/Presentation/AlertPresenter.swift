@@ -29,10 +29,15 @@ final class AlertPresenter {
 
         alert.addAction(action)
         viewController?.present(alert, animated: true, completion: nil)
+
+#if DEBUG
+        alert.view.accessibilityIdentifier = "AlertPresenter"
+#endif
     }
 
+
     // при ошибке скрывается алерт
-    func closeAlert() {
-        viewController?.dismiss(animated: true, completion: nil)
-    }
+ //   func closeAlert() {
+ //       viewController?.dismiss(animated: true, completion: nil)
+ //   }
 }
