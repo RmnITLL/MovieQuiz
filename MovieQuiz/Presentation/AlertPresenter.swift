@@ -35,9 +35,4 @@ final class AlertPresenter {
 #endif
     }
 
-
-    // при ошибке скрывается алерт
- //   func closeAlert() {
- //       viewController?.dismiss(animated: true, completion: nil)
- //   }
 }

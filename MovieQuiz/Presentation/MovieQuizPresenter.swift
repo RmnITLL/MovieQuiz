@@ -20,11 +20,11 @@ final class MovieQuizPresenter: MovieQuizPresenterProtocol, QuestionFactoryDeleg
     private var statisticService: StatisticServiceProtocol
     private var currentQuestionIndex: Int = 0
     private var correctAnswers: Int = 0
-        // общее количество вопросов для квиза
+    // общее количество вопросов для квиза
     private let questionsAmount: Int = 10
-        // фабрика вопросов. Контроллер будет обращаться за вопросами к ней.
+    // фабрика вопросов. Контроллер будет обращаться за вопросами к ней.
     private var questionFactory: QuestionFactoryProtocol?
-        // вопрос, который видит пользователь.
+    // вопрос, который видит пользователь.
     private var currentQuestion: QuizQuestion?
 
     init(viewController: MovieQuizViewControllerProtocol) {
@@ -173,5 +173,4 @@ final class MovieQuizPresenter: MovieQuizPresenterProtocol, QuestionFactoryDeleg
             total: questionsAmount
         )
     }
-
 }

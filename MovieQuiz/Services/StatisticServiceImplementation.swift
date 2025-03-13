@@ -1,9 +1,9 @@
-    //
-    //  StatisticService.swift
-    //  MovieQuiz
-    //
-    //  Created by R Kolos on 02.02.2025.
-    //
+//
+//  StatisticService.swift
+//  MovieQuiz
+//
+//  Created by R Kolos on 02.02.2025.
+//
 
 import Foundation
 
@@ -23,7 +23,7 @@ final class StatisticServiceImplementation {
 
 extension StatisticServiceImplementation: StatisticServiceProtocol {
 
-     var correct: Int {
+    var correct: Int {
         get {
             return storage.integer(forKey: Keys.correct.rawValue)
         }
@@ -42,7 +42,7 @@ extension StatisticServiceImplementation: StatisticServiceProtocol {
     }
 
     var totalAccuracy: Double {
-         Double(correct) / Double(gamesCount * 10) * 100.0
+        Double(correct) / Double(gamesCount * 10) * 100.0
     }
 
     var bestGame: GameResult {

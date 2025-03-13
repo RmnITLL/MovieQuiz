@@ -40,7 +40,7 @@ final class MovieQuizViewControllerMock: MovieQuizViewControllerProtocol {
     func showAlert(with model: MovieQuiz.AlertModel) {
 
     }
-    
+
     func changeStateButtons(isEnabled: Bool) {
 
     }

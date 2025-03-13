@@ -1,15 +1,14 @@
-    //
-    //  QuestionFactory.swift
-    //  MovieQuiz
-    //
-    //  Created by R Kolos on 28.01.2025.
-    //
-    //  храниться массив с вопросами и один метод, который вернёт случайно выбранный вопрос.
+//
+//  QuestionFactory.swift
+//  MovieQuiz
+//
+//  Created by R Kolos on 28.01.2025.
+//
+//  храниться массив с вопросами и один метод, который вернёт случайно выбранный вопрос.
 
 import Foundation
 
 final class QuestionFactory: QuestionFactoryProtocol {
-
 
     // MARK: - Private Properties
 
@@ -22,9 +21,9 @@ final class QuestionFactory: QuestionFactoryProtocol {
         self.moviesLoader = moviesLoader
     }
 
-        // MARK: - Methods
+    // MARK: - Methods
 
-        // случайный вопрос
+    // случайный вопрос
     func requestNextQuestion() {
 
         DispatchQueue.global().async { [weak self] in
@@ -39,31 +38,31 @@ final class QuestionFactory: QuestionFactoryProtocol {
             } catch {
                 DispatchQueue.main.async { [weak self] in
                     self?.delegate?
-                    .didFailToLoadData(
-                        with: NSError(
-                            domain: "com.moviequiz",
-                            code: 0,
-                            userInfo: [NSLocalizedDescriptionKey: "Невозможно загрузить данные"]
+                        .didFailToLoadData(
+                            with: NSError(
+                                domain: "com.moviequiz",
+                                code: 0,
+                                userInfo: [NSLocalizedDescriptionKey: "Невозможно загрузить данные"]
+                            )
                         )
-                    )
+                }
+                return
             }
-            return
-        }
 
-        let text = "Рейтинг этого фильма больше чем 9?"
-        let rating = Float(movie.rating) ?? 0
-        let correctAnswer = rating > 9
-        let question = QuizQuestion(
-            imageName: imageData,
-            text: text,
-            correctAnswer: correctAnswer)
+            let text = "Рейтинг этого фильма больше чем 9?"
+            let rating = Float(movie.rating) ?? 0
+            let correctAnswer = rating > 9
+            let question = QuizQuestion(
+                imageName: imageData,
+                text: text,
+                correctAnswer: correctAnswer)
 
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.didReceiveNextQuestion(question: question)
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.didReceiveNextQuestion(question: question)
+            }
         }
     }
-}
 
     func loadData() {
         moviesLoader.loadMovies { [weak self] result in
